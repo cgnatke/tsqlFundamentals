@@ -96,8 +96,33 @@ ORDER BY empid, orderyear;
 
 
 --ex. 5-1:
---create an inline function that accepts as inputs a supplier ID (@supid AS INT)
+--create an inline function that accepts as input a supplier ID (@supid AS INT)
 --and a requested number of products (@n AS INT). The function should return @n
 --products with the highest unit prices that are supplied by the specified supplier ID.
 
+GO 
 
+CREATE FUNCTION Production.TopProducts
+	(@supid AS INT, @n AS INT) RETURNS TABLE
+AS
+RETURN
+	SELECT TOP(@n) productid, productname, unitprice 
+	FROM PRODUCTION.Products
+	where Production.Products.supplierid = @supid
+	ORDER BY unitprice DESC;
+GO
+
+
+SELECT * FROM Production.TopProducts(5, 2);
+
+--cleanup
+IF OBJECT_ID('Production.TopProducts') IS NOT NULL
+	DROP Function Production.TopProducts
+
+--5-2
+--Using CROSS APPLY and the function created in 4-1,
+-- return for each supplier the two most expensive products
+
+
+
+	
