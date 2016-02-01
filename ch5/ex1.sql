@@ -123,6 +123,14 @@ IF OBJECT_ID('Production.TopProducts') IS NOT NULL
 --Using CROSS APPLY and the function created in 4-1,
 -- return for each supplier the two most expensive products
 
-
+SELECT supplierid, companyname, A.productid, A.productname, A.unitprice
+FROM Production.Suppliers AS S
+CROSS APPLY Production.TopProducts(S.supplierid, 2) AS A;
 
 	
+IF OBJECT_ID('Sales.VEmpOrders') IS NOT NULL
+	DROP VIEW Sales.VEmpOrders;
+IF OBJECT_ID('Production.TopProducts') IS NOT NULL
+	DROP FUNCTION Production.TopProducts;
+
+
